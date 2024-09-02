@@ -73,7 +73,7 @@ namespace CodingTracker
             //_dbService = new LocalDatabaseAdoService(defaultConnectionString);
             try
             {
-                var font = FigletFont.Load("ogre.flf");
+                var font = FigletFont.Load(@"Assets\Fonts\ogre.flf");
                 AnsiConsole.Write(new FigletText("Coding Tracker").Centered().Color(Color.Aqua));
 
                 string input = UserInput.InputStringWithRegexValidation("^(s|n|)$", "Wrong input. Please, type \"n\" for new habit, type \"s\" for select habit or skip by \"Enter\":");

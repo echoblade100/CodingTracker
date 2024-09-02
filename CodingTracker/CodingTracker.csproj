@@ -16,11 +16,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Assets/Fonts"/>
+		<Folder Include="Assets/Fonts" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Include="Assets/Fonts/*.*"/>
+	  <Content Include="Assets/Fonts/*.*">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
 	</ItemGroup>
   
 </Project>
