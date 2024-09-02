@@ -1,6 +1,65 @@
 ﻿using CodingTracker.Helpers;
 using CodingTracker.Models;
 using CodingTracker.Services;
+using System.Configuration;
+using System.Collections.Specialized;
+using Spectre.Console;
+/*
+ 		Console.WriteLine(DateTime.Now.ToString(CultureInfo.CreateSpecificCulture("ru-RU")));		
+		Console.WriteLine(new CultureInfo(CultureInfo.CurrentCulture.ToString()).DateTimeFormat.ShortTimePattern.Contains("H"));
+
+public static class DateTimeExtensions
+{
+    public static bool Is24Hrs(this CultureInfo cultureInfo)
+    {
+        return cultureInfo.DateTimeFormat.ShortTimePattern.Contains("H");
+    }
+}
+https://stackoverflow.com/questions/7302856/how-to-determine-if-current-culture-locale-uses-am-pm-or-24-hour-time
+*/
+
+/*
+ using System;
+using System.Timers;
+using System.Threading;
+
+public class Test
+{
+    public static void Main()
+    {
+        System.Timers.Timer myTimer = new System.Timers.Timer();
+        myTimer.Elapsed += new ElapsedEventHandler(OnTimer);
+        myTimer.Interval = 1000;
+        myTimer.Enabled = true;
+        myTimer.AutoReset = false;
+
+        Console.WriteLine(@"Press 'q' and 'Enter' to quit...");
+
+        while (Console.Read() != 'q')
+        {
+            Thread.Sleep(1000);
+        }
+    }
+
+    public static void OnTimer(Object source, ElapsedEventArgs e)
+    {
+        Console.WriteLine("DateTime: " + DateTime.Now);
+        System.Timers.Timer theTimer = (System.Timers.Timer)source;
+        theTimer.Interval += 1000;
+        theTimer.Enabled = true;
+    }
+}
+
+
+Timer timer= new timer(1000);
+timer.Elapsed += TimerElapsed;
+timer.Start();
+
+readkey();
+timer.Stop();
+
+void TimerElapsed(obj sender, Event e) {  cw(DateTime.Now) }
+ */
 
 namespace CodingTracker
 {
@@ -10,13 +69,13 @@ namespace CodingTracker
         private static Habit _habit = null!;
         static void Main(string[] args)
         {
-            _dbService = new LocalDatabaseAdoService("Data Source=habitTracker.sqlite");
-
-            Console.WriteLine("Habit Tracker");
-            Console.WriteLine("Create custom habit or use default?");
-            Console.WriteLine("Please, type \"n\" for new habit, type \"s\" for select habit or skip by \"Enter\":");
+            var defaultConnectionString = ConfigurationManager.AppSettings.Get("defaultConnectionString");
+            //_dbService = new LocalDatabaseAdoService(defaultConnectionString);
             try
             {
+                var font = FigletFont.Load("ogre.flf");
+                AnsiConsole.Write(new FigletText("Coding Tracker").Centered().Color(Color.Aqua));
+
                 string input = UserInput.InputStringWithRegexValidation("^(s|n|)$", "Wrong input. Please, type \"n\" for new habit, type \"s\" for select habit or skip by \"Enter\":");
                 if (input == "n")
                 {
@@ -28,11 +87,11 @@ namespace CodingTracker
 
                     _habit = new Habit() { Name = inputHabitName, MeasurementMethod = inputHabitMeasurement };
                     _habit = _dbService.CreateHabit(_habit);
-                    MainMenu();
+                    //MainMenu();
                 }
                 else if (input == "s")
                 {
-                    ViewAllHabits();
+                    //ViewAllHabits();
                     Console.WriteLine("Enter Id to select habit:");
                     int id = UserInput.InputNumberWithValidation(1, int.MaxValue);
                     Habit? habit = _dbService.GetHabitById(id);
@@ -45,12 +104,12 @@ namespace CodingTracker
                     Console.Clear();
 
                     _habit = habit!;
-                    MainMenu();
+                    //MainMenu();
                 }
                 else
                 {
                     _habit = _dbService.GetLastHabit()!;
-                    MainMenu();
+                    //MainMenu();
                 }
             }
             catch (Exception ex)
@@ -59,7 +118,7 @@ namespace CodingTracker
                 Main([]); // restart after crash
             }
         }
-
+/*
         public static void MainMenu()
         {
             bool endApp = false;
@@ -259,5 +318,6 @@ namespace CodingTracker
             table.Write(Format.Default);
             Console.WriteLine();
         }
+*/
     }
 }
